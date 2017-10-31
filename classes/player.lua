@@ -24,7 +24,7 @@ end
 
 function player:draw()
 	love.graphics.setColor( 220, 0, 10, 0.9*255 )
-	love.graphics.rectangle(self.x, self.y, self.spr:getWidth(), self.spr:getHeight())
+	love.graphics.rectangle("fill", self.x, self.y, 32, 32)
 end
 
 return player

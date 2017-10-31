@@ -1,6 +1,6 @@
-local bump = require"libs/bump"
-local player = require"classes/player"
-local camera = require"classes/camera"
+local bump = require"lib.bump"
+local player = require"classes.player"
+local camera = require"classes.camera"
 
 local controls = {up = 0, down = 0, left = 0, right = 0}
 
@@ -10,17 +10,19 @@ function love.load()
 end
 
 function love.update(dt)
-	local xDir = right - left
-	local yDir = down - up
+	local xDir = controls.right - controls.left
+	local yDir = controls.down - controls.up
 	local rotDir = (90 * xDir) + math.max((180 * yDir), 0)
-	player.vx = vx + (math.sin(rotDir)*1)
-	player.vy = vy + (math.cos(rotDir)*1)
+	player.vx = player.vx + (math.sin(rotDir)*1)
+	player.vy = player.vy + (math.cos(rotDir)*1)
 	player:update(dt)
-	camera:setPosition(player.x, player.y)
+	camera:setPosition(player.x - love.graphics.getWidth()/2 + 16, player.y - love.graphics.getHeight()/2 + 16)
 end
 
 function love.draw()
 	camera:set()
+	love.graphics.setColor( 10, 255, 10, 0.9*255 )
+	love.graphics.rectangle("fill", 0, 0, 32, 32)
 	player:draw()
 	camera:unset()
 end
