@@ -18,6 +18,8 @@ function player:init(x,y,spr,maxSpd)
 end
 
 function player:update(dt)
+	self.vx = math.min(self.vx, 16/dt)
+	self.vy = math.min(self.vy, 16/dt)
 	self.x = self.x + (self.vx * dt)
 	self.y = self.y + (self.vy * dt)
 end
