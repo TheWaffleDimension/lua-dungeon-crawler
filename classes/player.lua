@@ -23,7 +23,8 @@ function player:update(dt)
 end
 
 function player:draw()
-	love.graphics.draw(self.spr, self.x, self.y, self.x + self.spr:getWidth(), self.y + self.spr:getHeight())
+	love.graphics.setColor( 220, 0, 10, 0.9*255 )
+	love.graphics.rectangle(self.x, self.y, self.spr:getWidth(), self.spr:getHeight())
 end
 
 return player
