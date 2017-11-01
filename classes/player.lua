@@ -13,6 +13,10 @@ player.y = 0
 
 player.spr = nil
 
+local function filter(item, other)
+	
+end
+
 function player:init(name,x,y,spr,speed,maxSpd)
 	self.name = name or self.name
 	self.spr = spr
@@ -34,7 +38,7 @@ end
 
 function player:draw()
 	love.graphics.setColor( 220, 0, 10, 0.9*255 )
-	love.graphics.rectangle("fill", self.x, self.y, 32, 32)
+	love.graphics.rectangle("fill", self.x*scale, self.y*scale, 32*scale, 32*scale)
 end
 
 return player
