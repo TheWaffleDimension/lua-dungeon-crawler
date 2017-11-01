@@ -4,6 +4,7 @@ camera.y = 0
 camera.scaleX = 1
 camera.scaleY = 1
 camera.rotation = 0
+camera.speed = 2
 
 function camera:set()
   love.graphics.push()
@@ -29,6 +30,10 @@ function camera:scale(sx, sy)
   sx = sx or 1
   self.scaleX = self.scaleX * sx
   self.scaleY = self.scaleY * (sy or sx)
+end
+
+function camera:setSpeed(spd)
+	self.speed = spd
 end
 
 function camera:setPosition(x, y)

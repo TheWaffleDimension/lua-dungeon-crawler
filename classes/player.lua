@@ -1,27 +1,35 @@
 local player = {}
 
+player.name = "Player"
+
 player.vx = 0
 player.vy = 0
 
-player.maxSpd = 16
+player.speed = 64
+player.maxSpd = 64
 
 player.x = 0
 player.y = 0
 
 player.spr = nil
 
-function player:init(x,y,spr,maxSpd)
+function player:init(name,x,y,spr,speed,maxSpd)
+	self.name = name or self.name
 	self.spr = spr
 	self.x = x
 	self.y = y
-	self.maxSpd = maxSpd
+	self.speed = speed or self.speed
+	self.maxSpd = maxSpd or self.maxSpd
 end
 
 function player:update(dt)
-	self.vx = math.min(self.vx, 16/dt)
-	self.vy = math.min(self.vy, 16/dt)
+	self.vx = math.max(-1 * self.maxSpd, math.min(self.vx, self.maxSpd))
+	self.vy = math.max(-1 * self.maxSpd, math.min(self.vy, self.maxSpd))
 	self.x = self.x + (self.vx * dt)
 	self.y = self.y + (self.vy * dt)
+	local actualX, actualY, cols, length = world:move(player, self.x, self.y)
+	self.x = actualX
+	self.y = actualY
 end
 
 function player:draw()
