@@ -475,7 +475,7 @@ function Map:setSpriteBatches(layer)
 
 			while i < layer.width * layer.height do
 				for _y = 1, layer.height + 0.5, 0.5 do
-					local y = floor(_y)
+					local y = (_y)
 
 					for x = _x, layer.width, 2 do
 						i = i + 1
@@ -733,7 +733,7 @@ function Map:draw(tx, ty, sx, sy)
 	-- Map is translated to correct position so the right section is drawn
 	lg.push()
 	lg.origin()
-	lg.translate(math.floor(tx or 0), math.floor(ty or 0))
+	lg.translate(tx or 0, ty or 0) --lg.translate(math.floor(tx or 0), math.floor(ty or 0))
 
 	for _, layer in ipairs(self.layers) do
 		if layer.visible and layer.opacity > 0 then
@@ -774,7 +774,7 @@ function Map:drawTileLayer(layer)
 	assert(layer.type == "tilelayer", "Invalid layer type: " .. layer.type .. ". Layer must be of type: tilelayer")
 
 	for _, batch in pairs(layer.batches) do
-		lg.draw(batch, floor(layer.x), floor(layer.y))
+		lg.draw(batch, (layer.x), (layer.y)) --lg.draw(batch, floor(layer.x), floor(layer.y))
 	end
 end
 

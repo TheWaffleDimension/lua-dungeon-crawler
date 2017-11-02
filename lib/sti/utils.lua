@@ -117,10 +117,10 @@ function utils.convert_ellipse_to_polygon(x, y, w, h, max_segments)
 		local dist1 = vdist(vertices[1], vertices[2])
 		local dist2 = vdist(vertices[3], vertices[4])
 
-		-- Box2D threshold
+		--[[ Box2D threshold
 		if dist1 < 0.0025 or dist2 < 0.0025 then
 			return calc_segments(segments-2)
-		end
+		end ]]--
 
 		return segments
 	end
