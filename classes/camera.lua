@@ -1,4 +1,5 @@
 camera = {}
+camera.name = "Camera"
 camera.x = 0
 camera.y = 0
 camera.scaleX = 1

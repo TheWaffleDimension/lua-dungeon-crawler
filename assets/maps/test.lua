@@ -39,7 +39,7 @@ return {
   layers = {
     {
       type = "tilelayer",
-      name = "foreground",
+      name = "main",
       x = 0,
       y = 0,
       width = 64,
@@ -49,15 +49,15 @@ return {
       offsetx = 0,
       offsety = 0,
       properties = {
-        ["solid"] = "0"
+        ["collidable"] = false
       },
       encoding = "base64",
       compression = "zlib",
-      data = "eJztzwEKgCAQAMEzwYLy/9/VP8QJ1gzsA7ZExJFQjT202ZnQtXLiBf/+/fv379+/f//+/fv/y/89exLqKycAAAAAAAAAAAAAAIBPG2uQChE="
+      data = "eJztz0EKgAAMA8GqoIL6/+/aR4QedAZyz1ZB1dJbQ9uGvyfsvSO0c/h7gn79+vXr16//f/1X7w7tGf4OAAAAAAAAAAAAAAAAX/UCN9IGBQ=="
     },
     {
       type = "tilelayer",
-      name = "tiles-bg",
+      name = "solid",
       x = 0,
       y = 0,
       width = 64,
@@ -67,29 +67,11 @@ return {
       offsetx = 0,
       offsety = 0,
       properties = {
-        ["solid"] = "0"
+        ["collidable"] = true
       },
       encoding = "base64",
       compression = "zlib",
-      data = "eJztwTEBAAAAwqD1T20MH6AAAAAAAAAAAAAAAAAAAACAtwFAAAAB"
-    },
-    {
-      type = "tilelayer",
-      name = "tiles-solid",
-      x = 0,
-      y = 0,
-      width = 64,
-      height = 64,
-      visible = true,
-      opacity = 1,
-      offsetx = 0,
-      offsety = 0,
-      properties = {
-        ["solid"] = "1"
-      },
-      encoding = "base64",
-      compression = "zlib",
-      data = "eJztwTEBAAAAwqD1T20MH6AAAAAAAAAAAAAAAAAAAACAtwFAAAAB"
+      data = "eJztz6ENAEAIBEHaov/G3mNAfIJgJjl/GwFM5faBZfpv039D7cxmAAAAAAAAAAAAAAAAAMA/D5ZnAx8="
     }
   }
 }
