@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" nextobjectid="1">
+ <properties>
+  <property name="map_id" type="int" value="0"/>
+ </properties>
  <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16" spacing="1" tilecount="65" columns="5">
+  <grid orientation="orthogonal" width="10" height="16"/>
   <image source="../images/tiles.png" width="96" height="224"/>
  </tileset>
  <layer name="main" width="64" height="64">
@@ -8,7 +12,7 @@
    <property name="collidable" type="bool" value="false"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztz0EKgAAMA8GqoIL6/+/aR4QedAZyz1ZB1dJbQ9uGvyfsvSO0c/h7gn79+vXr16//f/1X7w7tGf4OAAAAAAAAAAAAAAAAX/UCN9IGBQ==
+   eJztz9EJwCAQRMEzggmo/berRRxCkhnY/30lIq6k1Xiftncn7Tn8PYN+/fr169ev/3/9fW8kbR7+DgAAAAAAAAAAAAAAAPBlC3CmBgU=
   </data>
  </layer>
  <layer name="solid" width="64" height="64">
@@ -16,7 +20,7 @@
    <property name="collidable" type="bool" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztz6ENAEAIBEHaov/G3mNAfIJgJjl/GwFM5faBZfpv039D7cxmAAAAAAAAAAAAAAAAAMA/D5ZnAx8=
+   eJztz6ENAEAIBEHaov/G3mNAfIJgJjl/G8FEbh9Ypv82/TfUzmwGAAAAAAAAAAAAAAAAAMBfD+uxAx8=
   </data>
  </layer>
 </map>

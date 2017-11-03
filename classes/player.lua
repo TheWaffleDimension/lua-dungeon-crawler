@@ -27,6 +27,10 @@ function player:init(name,x,y,spr,speed,maxSpd)
 end
 
 function player:update(dt)
+	local xDir = controls.right - controls.left
+	local yDir = controls.down - controls.up
+	player.vx = xDir*player.speed
+	player.vy = yDir*player.speed
 	self.vx = math.max(-1 * self.maxSpd, math.min(self.vx, self.maxSpd))
 	self.vy = math.max(-1 * self.maxSpd, math.min(self.vy, self.maxSpd))
 	self.x = self.x + (self.vx * dt)
