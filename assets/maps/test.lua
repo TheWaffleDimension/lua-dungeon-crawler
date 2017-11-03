@@ -9,7 +9,9 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextobjectid = 1,
-  properties = {},
+  properties = {
+    ["map_id"] = 0
+  },
   tilesets = {
     {
       name = "tiles",
@@ -27,7 +29,7 @@ return {
       },
       grid = {
         orientation = "orthogonal",
-        width = 16,
+        width = 10,
         height = 16
       },
       properties = {},
@@ -53,7 +55,7 @@ return {
       },
       encoding = "base64",
       compression = "zlib",
-      data = "eJztz0EKgAAMA8GqoIL6/+/aR4QedAZyz1ZB1dJbQ9uGvyfsvSO0c/h7gn79+vXr16//f/1X7w7tGf4OAAAAAAAAAAAAAAAAX/UCN9IGBQ=="
+      data = "eJztz9EJwCAQRMEzggmo/berRRxCkhnY/30lIq6k1Xiftncn7Tn8PYN+/fr169ev/3/9fW8kbR7+DgAAAAAAAAAAAAAAAPBlC3CmBgU="
     },
     {
       type = "tilelayer",
@@ -71,7 +73,7 @@ return {
       },
       encoding = "base64",
       compression = "zlib",
-      data = "eJztz6ENAEAIBEHaov/G3mNAfIJgJjl/GwFM5faBZfpv039D7cxmAAAAAAAAAAAAAAAAAMA/D5ZnAx8="
+      data = "eJztz6ENAEAIBEHaov/G3mNAfIJgJjl/G8FEbh9Ypv82/TfUzmwGAAAAAAAAAAAAAAAAAMBfD+uxAx8="
     }
   }
 }
