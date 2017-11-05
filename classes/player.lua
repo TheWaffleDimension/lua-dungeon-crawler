@@ -11,16 +11,19 @@ player.maxSpd = 64
 player.x = 0
 player.y = 0
 
+player.sprs = nil
 player.spr = nil
 player.facing = 0 -- 0 = Up; 1 = Right; 2 = Down; 3 = Left
+player.state = "idle"
 
 local function filter(item, other)
 	
 end
 
-function player:init(name,x,y,spr,speed,maxSpd)
+function player:init(name,x,y,spritesTable,speed,maxSpd)
 	self.name = name or self.name
-	self.spr = spr
+	self.sprs = spritesTable
+	self.spr = self.sprs[self.facing]
 	self.x = x
 	self.y = y
 	self.speed = speed or self.speed
@@ -34,6 +37,11 @@ function player:update(dt)
 	player.vy = yDir*player.speed
 	self.vx = math.max(-1 * self.maxSpd, math.min(self.vx, self.maxSpd))
 	self.vy = math.max(-1 * self.maxSpd, math.min(self.vy, self.maxSpd))
+	if math.abs(self.vx) > math.abs(self.vy) then
+		if self.vx < 0 then self.facing = 3 elseif self.vx > 0 then self.facing = 1 end
+	else
+		if self.vy < 0 then self.facing = 0 elseif self.vy > 0 then self.facing = 2 end
+	end
 	self.x = self.x + (self.vx * dt)
 	self.y = self.y + (self.vy * dt)
 	local actualX, actualY, cols, length = world:move(player, self.x, self.y)
