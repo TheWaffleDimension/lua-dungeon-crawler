@@ -12,6 +12,7 @@ player.x = 0
 player.y = 0
 
 player.spr = nil
+player.facing = 0 -- 0 = Up; 1 = Right; 2 = Down; 3 = Left
 
 local function filter(item, other)
 	
