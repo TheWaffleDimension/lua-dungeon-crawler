@@ -1,46 +1,38 @@
 local tml = {}
 
-local cache = {}
 local maps = {}
+local tilesets = {}
 
-local function get_decompressed_data(data)
-	local ffi     = require "ffi"
-	local d       = {}
-	local decoded = ffi.cast("uint32_t*", data)
-
-	for i = 0, data:len() / ffi.sizeof("uint32_t") do
-		table.insert(d, tonumber(decoded[i]))
-	end
-
-	return d
+function tml:getMap(name)
+	
 end
 
-local function layer_load(layer)
-	if layer.encoding then
-		if layer.encoding == "base64" then
-			assert(require "ffi", "Compressed maps require LuaJIT FFI.\nPlease Switch your interperator to LuaJIT or your Tile Layer Format to \"CSV\".")
-			local fd  = love.filesystem.newFileData(layer.data, "data", "base64"):getString()
-
-			if not layer.compression then
-				layer.data = get_decompressed_data(fd)
-			else
-				assert(love.math.decompress, "zlib and gzip compression require LOVE 0.10.0+.\nPlease set your Tile Layer Format to \"Base64 (uncompressed)\" or \"CSV\".")
-
-				if layer.compression == "zlib" then
-					local data = love.math.decompress(fd, "zlib")
-					layer.data = get_decompressed_data(data)
-				end
-
-				if layer.compression == "gzip" then
-					local data = love.math.decompress(fd, "gzip")
-					layer.data = get_decompressed_data(data)
-				end
-			end
-		end
+local function loadLayer(layerData)
+	if not layerData then return nil end
+	
+	local layer = {}
+	
+	layer.name = tostring(layerData.name):lower()
+	layer.type = layerData.type
+	
+	layer.x = layerData.x
+	layer.y = layerData.y
+	layer.offsetX = layerData.offsetx
+	layer.offsetY = layerData.offsety
+	
+	layer.w = layerData.width
+	layer.h = layerData.height
+	
+	layer.data = layerData.data
+	
+	layer.solid = false
+	
+	if layer.name == "solid" or layerData.properties["solid"] == true then
+		layer.solid = true
 	end
 	
-	layer.x = (layer.x or 0) + layer.offsetx
-	layer.y = (layer.y or 0) + layer.offsety
+	layer.transparency = ( 1 - layerData.opacity)
+	layer.visible = layerData.visible
 	
 	return layer
 end
@@ -49,11 +41,102 @@ function tml:load(name)
 	local map = {}
 	local mapFile = require("assets.maps." .. name)
 	map.id = mapFile.properties["id"] or nil
-	map.tileset = love.graphics.newImage(mapFile.tileSets[1].image)
+	
+	if not tilesets[mapFile.tilesets[1].name] then
+		map.tileset = mapFile.tilesets[1]
+		local fileName = helper:stringSplit(map.tileset.image, "/")[#helper:stringSplit(map.tileset.image, "/")]
+		map.tileset.image = love.graphics.newImage("assets/images/" .. fileName)
+		tilesets[map.tileset.name] = map.tileset
+	else
+		map.tileset = tilesets[mapFile.tilesets[1].name]
+	end
+	
 	map.layers = {}
 	map.tiles = {}
+	map.solid_tiles = {}
+	
+	map.tsX = mapFile.tilewidth
+	map.tsY = mapFile.tileheight
+	
+	map.scaleFactor = tileSize / ((map.tsX + map.tsY)/2)
+	
+	map.properties = {}
+	for i,v in pairs(mapFile.properties) do
+		map.properties[tostring(i)] = v
+	end
+	
+	map.quads = helper:generateQuads(
+		math.floor(map.tsX),
+		math.floor(map.tsY),
+		map.tileset.image,
+		map.tileset.spacing,
+		map.tileset.margin
+	)
 	
 	for i,v in pairs(mapFile.layers) do
-		table.insert(map.layers, layer_load(v))
+		local layer = loadLayer(v)
+		if layer ~= nil then
+			local numOfTilesInLayer = layer.w * layer.h
+			for y = 0, layer.h - 1 do
+				for x = 0, layer.w - 1 do
+					local tile = {}
+					tile.x = x
+					tile.y = y
+					tile.id = ((x + (y * layer.w)) + 1)
+					tile.image = layer.data[tile.id]
+					tile.layer = layer
+					if tile.image ~= 0 then
+						if layer.solid == true then
+							table.insert(map.solid_tiles, tile)
+							print(#map.solid_tiles)
+						end
+						
+						map.tiles[tile.id * 10^((i - 1)*10)] = tile
+					end
+				end
+			end
+			
+			table.insert(map.layers, layer)
+		end
 	end
+	
+	for i,v in pairs(map.solid_tiles) do
+		world:add(v, ((v.x * map.tsX) + v.layer.offsetX) * map.scaleFactor, ((v.y * map.tsY) + v.layer.offsetY) * map.scaleFactor, tileSize, tileSize)
+	end
+	
+	function map:draw(optionalScale)
+		local skipped = {}
+	
+		optionalScale = optionalScale*2 or 1
+		for i,v in pairs(self.tiles) do
+			if v.image ~= 0 then
+				if v.layer.solid then
+					table.insert(skipped, v)
+				else
+					love.graphics.draw(self.tileset.image, self.quads[v.image], ((v.x * self.tsX) + v.layer.offsetX) * optionalScale, ((v.y * self.tsY) + v.layer.offsetY) * optionalScale, 0, optionalScale, optionalScale)
+				end
+			end
+		end
+		
+		for i,v in pairs(skipped) do
+			if v.image ~= 0 then
+				love.graphics.draw(self.tileset.image, self.quads[v.image], ((v.x * self.tsX) + v.layer.offsetX) * optionalScale, ((v.y * self.tsY) + v.layer.offsetY) * optionalScale, 0, optionalScale, optionalScale)
+			end
+		end
+	end
+	
+	function map:update(dt)
+		for i,v in pairs(self.solid_tiles) do
+			--love.graphics.draw(self.tileset.image, self.quads[v.image], ((v.x * self.tsX) + v.layer.offsetX) * optionalScale, ((v.y * self.tsY) + v.layer.offsetY) * optionalScale, 0, optionalScale, optionalScale)
+			local exists = world:hasItem(v)
+			if exists then
+				world:update(v, ((v.x * self.tsX) + v.layer.offsetX) * self.scaleFactor, ((v.y * self.tsY) + v.layer.offsetY) * self.scaleFactor, tileSize, tileSize)
+			end
+		end
+	end
+	
+	table.insert(maps, map)
+	return map
 end
+
+return tml
