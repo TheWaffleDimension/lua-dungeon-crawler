@@ -1,19 +1,21 @@
 local helper = {}
 
 function helper:generateQuads(sizeX, sizeY, image, spacing, margin)
-	size = size or tileSize
+	sizeX = sizeX or tileSize
+	sizeY = sizeY or tileSize
 	spacing = spacing or 0
 	margin = margin or 0
+	
 	local quads = {}
-	local w = math.floor(image:getWidth() / sizeX)
-	local h = math.floor(image:getHeight() / sizeY)
+	local w = math.floor(math.floor(image:getWidth() / sizeX) - margin*2)
+	local h = math.floor(math.floor(image:getHeight() / sizeY) - margin*2)
 	
 	for y = 0, h - 1 do
 		for x = 0, w - 1 do
 			table.insert(quads,
 				love.graphics.newQuad(
-					x*sizeX,
-					y*sizeY,
+					x*sizeX + spacing*x,
+					y*sizeY + spacing*x,
 					sizeX,
 					sizeY,
 					image:getWidth(),

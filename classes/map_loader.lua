@@ -101,7 +101,7 @@ function tml:load(name)
 	end
 	
 	for i,v in pairs(map.solid_tiles) do
-		world:add(v, ((v.x * map.tsX) + v.layer.offsetX) * map.scaleFactor, ((v.y * map.tsY) + v.layer.offsetY) * map.scaleFactor, tileSize, tileSize)
+		world:add(v, ((v.x * map.tsX) + v.layer.offsetX) * map.scaleFactor * camera.scaleX, ((v.y * map.tsY) + v.layer.offsetY) * map.scaleFactor * camera.scaleY, tileSize*camera.scaleX, tileSize*camera.scaleY)
 	end
 	
 	function map:draw(optionalScale)
@@ -130,7 +130,17 @@ function tml:load(name)
 			--love.graphics.draw(self.tileset.image, self.quads[v.image], ((v.x * self.tsX) + v.layer.offsetX) * optionalScale, ((v.y * self.tsY) + v.layer.offsetY) * optionalScale, 0, optionalScale, optionalScale)
 			local exists = world:hasItem(v)
 			if exists then
-				world:update(v, ((v.x * self.tsX) + v.layer.offsetX) * self.scaleFactor, ((v.y * self.tsY) + v.layer.offsetY) * self.scaleFactor, tileSize, tileSize)
+				world:update(v, ((v.x * self.tsX) + v.layer.offsetX) * self.scaleFactor, ((v.y * self.tsY) + v.layer.offsetY) * self.scaleFactor, tileSize*camera.scaleX, tileSize*camera.scaleY)
+			end
+		end
+	end
+	
+	function map:unload()
+		for i,v in pairs(self.solid_tiles) do
+			--love.graphics.draw(self.tileset.image, self.quads[v.image], ((v.x * self.tsX) + v.layer.offsetX) * optionalScale, ((v.y * self.tsY) + v.layer.offsetY) * optionalScale, 0, optionalScale, optionalScale)
+			local exists = world:hasItem(v)
+			if exists then
+				world:remove(v)
 			end
 		end
 	end

@@ -5,7 +5,7 @@ camera.y = 0
 camera.scaleX = 1
 camera.scaleY = 1
 camera.rotation = 0
-camera.speed = 0.5
+camera.speed = 0.05
 
 function camera:set()
   love.graphics.push()
@@ -16,6 +16,16 @@ end
 
 function camera:unset()
   love.graphics.pop()
+end
+
+function camera:smoothMove(targetX, targetY, dt)
+	local w = love.graphics.getWidth()
+	local h = love.graphics.getHeight()
+	
+	local delta_x = (self.x - targetX) + (w/2 + tileSize/2)*self.scaleX
+	local delta_y = (self.y - targetY) + (h/2 + tileSize/2)*self.scaleY
+	
+	self:move(-1 * delta_x * self.speed * dt, -1 * delta_y * self.speed * dt)
 end
 
 function camera:move(dx, dy)
