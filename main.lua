@@ -2,12 +2,12 @@ bump = require"lib.bump"
 player = require"classes.player"
 camera = require"classes.camera"
 helper = require"lib.helper"
-sti = require"lib.sti"
 tml = require"classes.map_loader"
 objHandler = require"classes.object_handler"
 socket = require"socket"
+sprite = require"classes.sprite"
 
-scale = 2
+scale = 4
 tileSize = 32
 
 controls = {up = 0, down = 0, left = 0, right = 0}
@@ -19,32 +19,30 @@ function wait(s)
 end
 
 function love.load()
-	love.graphics.setDefaultFilter( "nearest", "nearest", 1 )
+	love.graphics.setDefaultFilter("nearest", "nearest", 1)
 	camera:scale(scale, scale)
 	world = bump.newWorld(tileSize)
-	player:init(nil, 0, 0, nil, tileSize*scale*1.25, tileSize*scale*1.25)
+	local playerMove = sprite:new(love.graphics.newImage("assets/images/mage-move.png"), 8, 1, 1)
+	local playerStrafe = sprite:new(love.graphics.newImage("assets/images/mage-move.png"), 8, 1, 1)
+	player:init(nil, 0, 0, {playerMove, playerStrafe, playerMove, playerStrafe}, tileSize*scale*1.5, tileSize*scale*1.5)
 	map = tml:load("test")
 	objHandler:newObject(player)
 	wait()
-	world:add(player, player.x, player.y, tileSize, tileSize)
+	world:add(player, player.x, player.y, tileSize*camera.scaleX, tileSize*camera.scaleY)
 end
 
 function love.update(dt)
-	objHandler:update(dt)
-	local camX = (camera.x - player.x*camera.scaleX + love.graphics.getWidth()*0.5*camera.scaleX + tileSize*2*camera.scaleX) * dt * camera.speed
-	local camY = (camera.y - player.y*camera.scaleY + love.graphics.getHeight()*0.5*camera.scaleY - tileSize*0.5*camera.scaleY) * dt * camera.speed
-	camera:move(-1*camX, -1*camY)
 	--map:update(dt)
+	objHandler:update(dt)
+	camera:smoothMove(player.x, player.y, dt)
 end
 
 function love.draw()
 	love.graphics.setColor( 255, 255, 255 )
-	--map:draw(-camera.x, -camera.y, camera.scaleX, camera.scaleY)
-	--map:bump_draw(world, -camera.x, -camera.y, scale, scale)
+	love.graphics.print(tostring(love.timer.getFPS()), 10, 10)
 	camera:set()
 	map:draw(scale)
-	--player:draw()
-	objHandler:draw()
+	objHandler:draw(scale)
 	camera:unset()
 end
 
