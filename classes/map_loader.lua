@@ -88,7 +88,6 @@ function tml:load(name)
 					if tile.image ~= 0 then
 						if layer.solid == true then
 							table.insert(map.solid_tiles, tile)
-							print(#map.solid_tiles)
 						end
 						
 						map.tiles[tile.id * 10^((i - 1)*10)] = tile
