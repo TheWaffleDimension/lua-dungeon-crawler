@@ -5,7 +5,7 @@ camera.y = 0
 camera.scaleX = 1
 camera.scaleY = 1
 camera.rotation = 0
-camera.speed = 0.05
+camera.speed = 0.1
 
 function camera:set()
   love.graphics.push()

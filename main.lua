@@ -37,7 +37,7 @@ function love.load()
 	local l = Light.new( {x = 50, y = 50}, {r = 1, g = 1, b = 1, a = 1}, 1, 256 )
 	table.insert(lights, l)
 	
-	local l2 = Light.new( {x = player.x, y = player.y}, {r = 1, g = 1, b = 1, a = 1}, 1, 64 )
+	local l2 = Light.new( {x = player.x, y = player.y}, {r = 1, g = 1, b = 1, a = 1}, 0.5, 64 )
 	table.insert(lights, l2)
 	
 	shader = Shader.load("light")
@@ -46,7 +46,7 @@ function love.load()
 end
 
 function love.update(dt)
-	--map:update(dt)
+	map:update(dt)
 	objHandler:update(dt)
 	lights[2]:setPosition({ x = ((player.x / camera.scaleX)/camera.scaleX) + 4, y = ((player.y / camera.scaleY)/camera.scaleY) + 4 })
 	camera:smoothMove(player.x, player.y, dt)

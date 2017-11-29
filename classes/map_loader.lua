@@ -129,7 +129,7 @@ function tml:load(name)
 			--love.graphics.draw(self.tileset.image, self.quads[v.image], ((v.x * self.tsX) + v.layer.offsetX) * optionalScale, ((v.y * self.tsY) + v.layer.offsetY) * optionalScale, 0, optionalScale, optionalScale)
 			local exists = world:hasItem(v)
 			if exists then
-				world:update(v, ((v.x * self.tsX) + v.layer.offsetX) * self.scaleFactor, ((v.y * self.tsY) + v.layer.offsetY) * self.scaleFactor, tileSize*camera.scaleX, tileSize*camera.scaleY)
+				world:update(v, ((v.x * map.tsX) + v.layer.offsetX) * map.scaleFactor * camera.scaleX, ((v.y * map.tsY) + v.layer.offsetY) * map.scaleFactor * camera.scaleY, tileSize*camera.scaleX, tileSize*camera.scaleY)
 			end
 		end
 	end
