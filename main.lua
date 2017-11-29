@@ -6,11 +6,15 @@ tml = require"classes.map_loader"
 objHandler = require"classes.object_handler"
 socket = require"socket"
 sprite = require"classes.sprite"
+Light = require"classes.light"
+Shader = require"classes.shader"
 
 scale = 4
 tileSize = 32
 
 controls = {up = 0, down = 0, left = 0, right = 0}
+
+lights = {}
 
 function wait(s)
 	s = tonumber(s) or 0.01
@@ -29,21 +33,38 @@ function love.load()
 	objHandler:newObject(player)
 	wait()
 	world:add(player, player.x, player.y, tileSize*camera.scaleX, tileSize*camera.scaleY)
+	
+	local l = Light.new( {x = 50, y = 50}, {r = 1, g = 1, b = 1, a = 1}, 1, 256 )
+	table.insert(lights, l)
+	
+	local l2 = Light.new( {x = player.x, y = player.y}, {r = 1, g = 1, b = 1, a = 1}, 1, 64 )
+	table.insert(lights, l2)
+	
+	shader = Shader.load("light")
+	
+	print(shader:getWarnings())
 end
 
 function love.update(dt)
 	--map:update(dt)
 	objHandler:update(dt)
+	lights[2]:setPosition({ x = ((player.x / camera.scaleX)/camera.scaleX) + 4, y = ((player.y / camera.scaleY)/camera.scaleY) + 4 })
 	camera:smoothMove(player.x, player.y, dt)
+	for i=1,#lights do
+		lights[i]:sendToShader(i-1, shader)
+	end
 end
 
 function love.draw()
-	love.graphics.setColor( 255, 255, 255 )
-	love.graphics.print(tostring(love.timer.getFPS()), 10, 10)
+	love.graphics.setColor( 128, 128, 128 )
+	love.graphics.setShader(shader)
 	camera:set()
 	map:draw(scale)
 	objHandler:draw(scale)
+	love.graphics.setShader()
+	--love.graphics.circle("fill", lights[1]:getPosition().x, lights[1]:getPosition().y, 100)
 	camera:unset()
+	love.graphics.print(tostring(love.timer.getFPS()), 10, 10)
 end
 
 function love.keypressed(key)

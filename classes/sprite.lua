@@ -32,7 +32,7 @@ function sprites:new(image, collumns, rows, durationInSeconds)
 	
 	function sprite:draw(x, y)
 		local frameNum = math.floor((self.currentTime / self.duration) * #self.frames) + 1
-		print(frameNum)
+		--print(frameNum)
 		love.graphics.draw(self.image, self.frames[frameNum], x, y, 0, tileSize/(image:getWidth()/collumns)*camera.scaleX, tileSize/(image:getHeight()/rows)*camera.scaleY)
 	end
 	
