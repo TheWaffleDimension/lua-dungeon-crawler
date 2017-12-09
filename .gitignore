@@ -1,2 +1,4 @@
 *.love
+*.dll
+*.exe
 npp-workspace.lua
